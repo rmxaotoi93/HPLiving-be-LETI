@@ -1,0 +1,120 @@
+const User = require("../models/user");
+const bcrypt = require("mongoose-bcrypt");
+const { generateToken } = require("../services/authService");
+
+exports.getUserList = async (req, res) => {
+  try {
+    const userList = await User.find({});
+    res.status(200).json({
+      userList,
+    });
+  } catch (err) {
+    res.status(400).json({
+      mess: "Error happens",
+    });
+  }
+};
+
+exports.updateUsers = async (req, res) => {
+  try {
+    const { name, email, password, token } = req.body;
+    if (!name && !email && !password) {
+      return res.status(400).json({
+        mess: "Name, email, password are required",
+      });
+      //tu token lay user
+    }
+
+    if (!token) {
+      return res.status(400).json({
+        mess: "require token",
+      });
+    }
+    const user = await User.findOne({ tokens: token });
+    if (email) {
+      user.email = email;
+    }
+    if (name) {
+      user.name = name;
+    }
+    if (password) {
+      user.password = password;
+    }
+    await user.save();
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    res.status(400).json({
+      mess: err.mess,
+    });
+  }
+};
+
+exports.createUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        mess: "Name, email, password are required",
+      });
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+    if (role === "Host") {
+      if (!introduction) {
+        return res.status(400).json({
+          mess: err.mess,
+        });
+      }
+    }
+    const user = await User.create({
+      email: email,
+      name: name,
+      password: hashPassword,
+    });
+    console.log("useeer", user);
+
+    const token = await generateToken(user);
+
+    res.status(200).json({
+      status: "success",
+      data: { user, token },
+    });
+  } catch (err) {
+    res.status(400).json({
+      mess: err.message,
+    });
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) throw new Error("email and password are wrong");
+
+    // check email and password is correct
+    const user = await loginWithEmail(email, password);
+    const token = await generateToken(user);
+
+    res.status(200).json({
+      status: "success",
+      data: { user, token },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  console.log("asdsad", req.params.id);
+
+  await User.findByIdAndDelete(req.params.id);
+  res.status(200).json({
+    data: null,
+    status: "success",
+  });
+};
