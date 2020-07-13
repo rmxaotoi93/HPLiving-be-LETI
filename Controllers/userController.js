@@ -1,5 +1,5 @@
 const User = require("../models/user");
-const bcrypt = require("mongoose-bcrypt");
+const bcrypt = require("bcrypt");
 const { generateToken } = require("../services/authService");
 
 exports.getUserList = async (req, res) => {
@@ -61,13 +61,7 @@ exports.createUser = async (req, res) => {
       });
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    if (role === "Host") {
-      if (!introduction) {
-        return res.status(400).json({
-          mess: err.mess,
-        });
-      }
-    }
+
     const user = await User.create({
       email: email,
       name: name,
@@ -84,27 +78,6 @@ exports.createUser = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       mess: err.message,
-    });
-  }
-};
-
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) throw new Error("email and password are wrong");
-
-    // check email and password is correct
-    const user = await loginWithEmail(email, password);
-    const token = await generateToken(user);
-
-    res.status(200).json({
-      status: "success",
-      data: { user, token },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: "fail",
-      message: err.message,
     });
   }
 };
