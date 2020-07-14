@@ -5,9 +5,14 @@ const {
   getAllHouse,
   addHouse,
   updateHouse,
+  deleteHouse,
 } = require("../controllers/houseController");
 
 /* GET host list. */
-router.get("/", getAllHouse).post("/", addHouse).put("/", updateHouse);
+router
+  .get("/", getAllHouse)
+  .post("/", addHouse)
+  .put("/:id", updateHouse)
+  .delete("/:id", deleteHouse);
 
 module.exports = router;

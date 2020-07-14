@@ -22,7 +22,6 @@ exports.updateUsers = async (req, res) => {
       return res.status(400).json({
         mess: "Name, email, password are required",
       });
-      //tu token lay user
     }
 
     if (!token) {

@@ -9,5 +9,5 @@ const {
 
 router.route("/").get(getUserList).post(createUser).put(updateUsers);
 
-router.route("/users/:id").delete(deleteUser);
+router.route("/:id").delete(deleteUser);
 module.exports = router;
