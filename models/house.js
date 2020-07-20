@@ -14,9 +14,11 @@ const houseSchema = new mongoose.Schema(
       type: String,
     },
 
-    images: {
-      type: String,
-    },
+    images: [
+      {
+        type: String,
+      },
+    ],
 
     price: {
       type: Number,
@@ -25,9 +27,11 @@ const houseSchema = new mongoose.Schema(
     status: {
       type: String,
     },
-    location: {
-      type: String,
-    },
+    location: [
+      {
+        type: String,
+      },
+    ],
   },
   {
     timestamps: true,

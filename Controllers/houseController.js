@@ -1,5 +1,7 @@
 const House = require("../models/house");
-
+const multer = require("multer");
+const { find } = require("../models/house");
+const upload = multer();
 const getAllHouse = async (req, res) => {
   const houseList = await House.find({});
   res.send({
@@ -95,9 +97,76 @@ const deleteHouse = async (req, res) => {
     status: "success",
   });
 };
+const getDistrict = async (req, res) => {
+  console.log("get district here");
+  await House.find().distinct("_id", (err, result) => {
+    console.log(result);
+    res.send({
+      status: "ok la",
+      data: result,
+    });
+  });
+};
+
+const getSingle = async (req, res) => {
+  const singleHouse = await House.findById(req.params.id);
+  console.log("single house", singleHouse);
+  res.send({
+    status: "ok la",
+    data: singleHouse,
+  });
+};
+
+const getAllImage = async (req, res) => {
+  const allHouse = await House.find({});
+  let allImage = [];
+  for (let i = 0; i < allHouse.length; i++) {
+    allImage.push(allHouse[i].images);
+  }
+  res.send({
+    status: "get all img",
+    data: allImage,
+  });
+};
+
+const filter = async (req, res) => {
+  const { price, typeRoom, location } = req.query;
+  console.log("filterrrrrrr222");
+  let queries = [];
+  if (price) {
+    // return res.json({
+    //   data: await House.find({}),
+    // });
+    queries.push({ price: { $eq: price } });
+  }
+  if (location) {
+    // return res.json({
+    //   data: await House.find({}),
+    // });
+    queries.push({ location: { $eq: location } });
+  }
+  if (typeRoom) {
+    // return res.json({
+    //   data: await House.find({}),
+    // });
+    queries.push({ typeRoom: { $eq: typeRoom } });
+  }
+  const finalQuery = queries.length == 0 ? {} : { $and: queries };
+
+  const filter = await House.find(finalQuery);
+  console.log("filterrrrrrr");
+  res.status(201).json({
+    status: "success",
+    data: filter,
+  });
+};
 module.exports = {
   getAllHouse,
   addHouse,
   updateHouse,
   deleteHouse,
+  getDistrict,
+  getSingle,
+  getAllImage,
+  filter,
 };

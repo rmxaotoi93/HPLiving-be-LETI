@@ -69,6 +69,7 @@ exports.createUser = async (req, res) => {
     console.log("useeer", user);
 
     const token = await generateToken(user);
+    console.log("token", token);
 
     res.status(200).json({
       status: "success",
