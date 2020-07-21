@@ -10,21 +10,23 @@ exports.loginWithEmail = async (req, res, next) => {
     if (!email || !password) {
       return res.status(401).json({
         status: "fail",
-        message: "Wrong email & password",
+        message: "Not exist email or password",
       });
     }
+    console.log("doooo");
 
     const user = await User.checkEmailPassword(email, password);
     console.log(user);
 
     if (!user) {
+      console.log("ifff");
       return res.status(401).json({
         status: "fail",
         message: "Wrong user",
       });
     }
 
-    const token = await generateToken();
+    const token = await generateToken(user);
 
     res.status(201).json({
       status: "success",
@@ -61,4 +63,6 @@ exports.loginFacebook = async (req, res, next) => {
   return res.status(200).json({ status: "success", data: { user, token } });
 };
 
-exports.logout = async (req, res, next) => {};
+exports.logout = async (req, res, next) => {
+  console.log(req.query.token);
+};
