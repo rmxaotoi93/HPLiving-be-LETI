@@ -57,8 +57,8 @@ exports.loginFacebook = async (req, res, next) => {
     email: data.data.email,
     name: data.data.name,
   });
-
-  const token = await user.generateToken();
+  console.log(user);
+  const token = await generateToken(user);
 
   return res.status(200).json({ status: "success", data: { user, token } });
 };

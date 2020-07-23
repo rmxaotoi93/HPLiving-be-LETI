@@ -1,9 +1,19 @@
 const House = require("../models/house");
 const multer = require("multer");
-const { find } = require("../models/house");
+const cloudinary = require("../services/cloudinary");
 const upload = multer();
+
 const getAllHouse = async (req, res) => {
-  const houseList = await House.find({});
+  const minPrice = req.query.minPrice;
+  const maxPrice = req.query.maxPrice;
+  let houseList;
+  if (!minPrice || !maxPrice) {
+    houseList = await House.find();
+  } else {
+    houseList = await House.find({
+      price: { $gte: minPrice, $lte: maxPrice },
+    }).sort({ price: 1 });
+  }
   res.send({
     status: "ok",
     data: houseList,
@@ -26,10 +36,20 @@ const addHouse = async (req, res) => {
       description: description,
       typeRoom: typeRoom,
       price: price,
-      images: images,
+
       status: status,
       location: location,
     });
+
+    if (req.files && req.files.length > 0) {
+      let image = await cloudinary.uploadSingleFile(
+        req.files[0].path,
+        "Images"
+      );
+      console.log(image);
+      house.images = [image.url];
+      house.save();
+    }
     res.send({
       status: "ok",
       data: house,
@@ -130,27 +150,17 @@ const getAllImage = async (req, res) => {
 };
 
 const filter = async (req, res) => {
-  const { price, typeRoom, location } = req.query;
+  const { location } = req.query;
   console.log("filterrrrrrr222");
   let queries = [];
-  if (price) {
-    // return res.json({
-    //   data: await House.find({}),
-    // });
-    queries.push({ price: { $eq: price } });
-  }
+
   if (location) {
     // return res.json({
     //   data: await House.find({}),
     // });
     queries.push({ location: { $eq: location } });
   }
-  if (typeRoom) {
-    // return res.json({
-    //   data: await House.find({}),
-    // });
-    queries.push({ typeRoom: { $eq: typeRoom } });
-  }
+
   const finalQuery = queries.length == 0 ? {} : { $and: queries };
 
   const filter = await House.find(finalQuery);

@@ -8,16 +8,19 @@ const userSchema = new mongoose.Schema(
       trim: true,
       unique: true,
     },
+    images: [
+      {
+        type: String,
+      },
+    ],
     email: {
       type: String,
       required: [true, "email is required"],
       trim: true,
       unique: true,
-      lowercase: true,
     },
     password: {
       type: String,
-      required: [true, "password is required"],
       trim: true,
     },
     tokens: [
@@ -42,5 +45,16 @@ userSchema.statics.checkEmailPassword = async (email, password) => {
   return user;
 };
 
+userSchema.statics.findOneOrCreate = async function ({ email, name }) {
+  // this refers to User model
+  let user = await this.findOne({ email });
+  if (!user) {
+    user = await this.create({
+      email: email,
+      name: name,
+    });
+  }
+  return user;
+};
 const User = mongoose.model("User", userSchema);
 module.exports = User;
