@@ -13,7 +13,7 @@ exports.loginWithEmail = async (req, res, next) => {
         message: "Not exist email or password",
       });
     }
-    console.log("doooo");
+    console.log("doooo", req.body);
 
     const user = await User.checkEmailPassword(email, password);
     console.log(user);
