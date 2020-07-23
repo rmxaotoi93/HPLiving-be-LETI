@@ -11,7 +11,7 @@ const {
   getDistrict,
   getSingle,
   getAllImage,
-} = require("../controllers/houseController");
+} = require("../Controllers/houseController");
 
 /* GET host list. */
 router

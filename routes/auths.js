@@ -4,7 +4,7 @@ const {
   loginWithEmail,
   loginFacebook,
   logout,
-} = require("../controllers/authController");
+} = require("../Controllers/authController");
 var router = express.Router();
 
 router.route("/auth/login").post(loginWithEmail);

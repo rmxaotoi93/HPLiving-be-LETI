@@ -9,8 +9,8 @@ const {
   updateUsers,
   deleteUser,
   getMyProfile,
-} = require("../controllers/userController");
-const { loginWithEmail } = require("../controllers/authController");
+} = require("../Controllers/userController");
+const { loginWithEmail } = require("../Controllers/authController");
 
 router.route("/").get(getUserList).post(multerUpload, createUser);
 router.put("/:id", updateUsers);
