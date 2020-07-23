@@ -1,5 +1,5 @@
 var express = require("express");
-const { filter } = require("../controllers/houseController");
+const { filter } = require("../Controllers/houseController");
 var router = express.Router();
 
 router.get("/", filter);
