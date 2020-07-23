@@ -36,7 +36,7 @@ const addHouse = async (req, res) => {
       description: description,
       typeRoom: typeRoom,
       price: price,
-
+      images: images,
       status: status,
       location: location,
     });
