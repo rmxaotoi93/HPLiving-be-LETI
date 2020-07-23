@@ -10,24 +10,32 @@ const houseSchema = new mongoose.Schema(
       type: String,
       required: [true, "title is required "],
     },
-    image: [
+    typeRoom: {
+      type: String,
+    },
+
+    images: [
       {
         type: String,
       },
     ],
+
     price: {
       type: Number,
       required: [true, "title is required "],
     },
-    state: {
+    status: {
       type: String,
     },
-    tags: {
-      type: Array,
-    },
+    location: [
+      {
+        type: String,
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
+
 module.exports = mongoose.model("House", houseSchema);
