@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 mongoose
-  .connect("mongodb://localhost/final-project", {
+  .connect(process.env.DB, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false,
