@@ -20,20 +20,26 @@ exports.getUserList = async (req, res) => {
 
 exports.updateUsers = async (req, res) => {
   try {
-    const { name, email, password, _id, image } = req.body;
-    if (!name && !email && !password && !_id && !image) {
+    const { name, email, password, image } = req.body;
+    const { id } = req.params;
+    console.log(req);
+    if (!name && !email && !password && !image) {
       return res.status(400).json({
         mess: "Name, email, password are required",
       });
     }
-    const hashPassword = await bcrypt.hash(password, 10);
-    if (!_id) {
-      return res.status(400).json({
-        mess: "require id",
-      });
+    if (password) {
+      const hashPassword = await bcrypt.hash(password, 10);
+      if (!_id) {
+        return res.status(400).json({
+          mess: "require id",
+        });
+      }
     }
+    console.log("123123123123", id);
 
-    const user = await User.findById({ _id: _id });
+    const user = await User.findById({ _id: id });
+    console.log(user);
     if (email) {
       user.email = email;
     }
