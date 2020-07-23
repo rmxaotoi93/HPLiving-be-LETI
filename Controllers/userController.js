@@ -74,6 +74,7 @@ exports.createUser = async (req, res) => {
       email: email,
       name: name,
       password: hashPassword,
+      images: images,
     });
     if (req.files && req.files.length > 0) {
       let image = await cloudinary.uploadSingleFile(
