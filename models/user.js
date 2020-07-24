@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
 userSchema.statics.checkEmailPassword = async (email, password) => {
   const user = await User.findOne({ email: email });
   if (!user) {
-    throw new Error("Unable to login");
+    throw new Error("Unable to login 11111");
   }
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
