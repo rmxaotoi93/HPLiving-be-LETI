@@ -19,7 +19,6 @@ exports.loginWithEmail = async (req, res, next) => {
     console.log(user);
 
     if (!user) {
-      console.log("ifff");
       return res.status(401).json({
         status: "fail",
         message: "Wrong user",

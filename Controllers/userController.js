@@ -67,7 +67,7 @@ exports.updateUsers = async (req, res) => {
 exports.createUser = async (req, res) => {
   console.log("asdasdasd");
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, images } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({
         mess: "Name, email, password are required",
@@ -101,6 +101,7 @@ exports.createUser = async (req, res) => {
       data: { user, token },
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       mess: err.message,
     });
@@ -118,8 +119,6 @@ exports.getMyProfile = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-  console.log("asdsad", req.params.id);
-
   await User.findByIdAndDelete(req.params.id);
   res.status(200).json({
     data: null,
