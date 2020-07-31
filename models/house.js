@@ -19,7 +19,10 @@ const houseSchema = new mongoose.Schema(
         type: String,
       },
     ],
-
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
     price: {
       type: Number,
       required: [true, "title is required "],

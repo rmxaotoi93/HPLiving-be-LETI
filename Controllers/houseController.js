@@ -31,6 +31,8 @@ const addHouse = async (req, res) => {
       status,
       location,
     } = req.body;
+    const user = req.user;
+    console.log(user);
     const house = await House.create({
       title: title,
       description: description,
@@ -39,6 +41,7 @@ const addHouse = async (req, res) => {
       images: images,
       status: status,
       location: location,
+      user: user,
     });
 
     if (req.files && req.files.length > 0) {
@@ -70,43 +73,70 @@ const updateHouse = async (req, res) => {
     price,
     status,
     location,
-    _id,
   } = req.body;
-  console.log("update", _id);
-  if (!_id) {
-    return res.status(400).json({
-      mess: "require id",
-    });
-  }
-  const fixHouseInfo = await House.findById({ _id: _id });
-  console.log("idne", _id);
 
-  if (title) {
-    fixHouseInfo.title = title;
+  const user = req.user;
+  const id = req.params.id;
+  console.log(id);
+  const house = await House.findById(id);
+
+  if (!user._id.equals(house.user)) {
+    console.log("123");
+    throw new Error("dont allow to update comment");
   }
-  if (description) {
-    fixHouseInfo.description = description;
-  }
-  if (typeRoom) {
-    fixHouseInfo.typeRoom = typeRoom;
-  }
-  if (price) {
-    fixHouseInfo.price = price;
-  }
-  if (images) {
-    fixHouseInfo.images = images;
-  }
-  if (status) {
-    fixHouseInfo.status = status;
-  }
-  if (location) {
-    fixHouseInfo.location = location;
-  }
-  await fixHouseInfo.save();
+
+  const updatedHouse = {
+    title,
+    description,
+    typeRoom,
+    images,
+    price,
+    status,
+    location,
+  };
+
+  const newHouse = await House.findByIdAndUpdate({ _id: id }, updatedHouse);
+  console.log(newHouse);
+
   res.status(200).json({
+    data: newHouse,
     status: "success",
-    data: fixHouseInfo,
   });
+
+  // if (!_id) {
+  //   return res.status(400).json({
+  //     mess: "require id",
+  //   });
+  // }
+  // const fixHouseInfo = await House.findById({ _id: _id });
+  // console.log("idne", _id);
+
+  // if (title) {
+  //   fixHouseInfo.title = title;
+  // }
+  // if (description) {
+  //   fixHouseInfo.description = description;
+  // }
+  // if (typeRoom) {
+  //   fixHouseInfo.typeRoom = typeRoom;
+  // }
+  // if (price) {
+  //   fixHouseInfo.price = price;
+  // }
+  // if (images) {
+  //   fixHouseInfo.images = images;
+  // }
+  // if (status) {
+  //   fixHouseInfo.status = status;
+  // }
+  // if (location) {
+  //   fixHouseInfo.location = location;
+  // }
+  // await fixHouseInfo.save();
+  // res.status(200).json({
+  //   status: "success",
+  //   data: fixHouseInfo,
+  // });
 };
 const deleteHouse = async (req, res) => {
   console.log("delete house id", req.params.id);
