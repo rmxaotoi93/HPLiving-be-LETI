@@ -1,11 +1,21 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
+const reviewSchema = new mongoose.Schema(
+  {
+    comment: {
+      type: String,
+    },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+    },
+    house: {
+      type: mongoose.Schema.ObjectId,
+      ref: "House",
+    },
   },
-  comment: {
-    type: String,
-  },
-});
-module.exports = mongoose.model("House", houseSchema);
+  {
+    timestamps: true,
+  }
+);
+module.exports = mongoose.model("Review", reviewSchema);

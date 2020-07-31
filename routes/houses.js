@@ -12,14 +12,25 @@ const {
   getSingle,
   getAllImage,
 } = require("../Controllers/houseController");
+const { loginRequire } = require("../services/authService");
+const {
+  createReview,
+  updateReview,
+  deleteReview,
+  getReview,
+} = require("../Controllers/reviewsController");
 
 /* GET host list. */
 router
   .get("/", getAllHouse)
-  .post("/", multerUpload, addHouse)
-  .put("/:id", updateHouse)
+  .post("/", loginRequire, multerUpload, addHouse)
+  .put("/:id", loginRequire, updateHouse)
   .delete("/:id", deleteHouse)
-  .get("/gallery", getAllImage);
+  .get("/gallery", getAllImage)
+  .post("/:id/reviews", loginRequire, createReview)
+  .put("/:id/reviews/:reviewsId", loginRequire, updateReview)
+  .delete("/:id/reviews/:reviewsId", loginRequire, deleteReview)
+  .get("/:id/reviews", getReview);
 router.get("/:id", getSingle);
 router.get("/district", getDistrict);
 

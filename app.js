@@ -30,4 +30,5 @@ app.use("/houses", houseRouter);
 app.use("/users", userRouter);
 app.use("/", authRouter);
 app.use("/search", searchRouter);
+
 module.exports = app;
